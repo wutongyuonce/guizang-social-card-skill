@@ -8,7 +8,7 @@ Editorial Magazine x E-ink (`template-editorial-card.html`):
 
 - `--serif-zh`: Noto Serif SC, Songti SC, STSong — display titles.
 - `--serif-en`: Playfair Display, italic for subtitles and pull quotes.
-- `--sans-zh`: Noto Sans SC, PingFang SC — body and lead.
+- `--sans-zh`: Noto Sans SC, PingFang SC — utility text and fallback; body and lead default to serif-zh in Editorial.
 - `--sans-en`: Inter — Latin body in mixed content.
 - `--mono`: IBM Plex Mono — labels, page metadata, issue strip, captions.
 
@@ -87,11 +87,11 @@ The seed template ships these caps. Anything more violates the vertical budget �
 
 ### Editorial `.h-xl` — Hard Caps per Board (validated)
 
-The Editorial seed default for `.h-xl` is 92px serif weight 700. Verified in `local-tests/demo-smoke-editorial-travel/` on M11/M14/M07 with 3-paragraph body + ledger + 5-step pipeline:
+The Editorial seed default for `.h-xl` is 88px serif weight 500. Verified in `local-tests/demo-smoke-editorial-travel/` on M11/M14/M07 with 3-paragraph body + ledger + 5-step pipeline:
 
 | Board                | Default `.h-xl` | Max lines | Max chars / line | What happens past the cap                                                 |
 | -------------------- | --------------- | --------- | ---------------- | ------------------------------------------------------------------------- |
-| `.poster.xhs` (1080×1440) | 92px       | 2         | 9                | 3 lines push the marginalia / ledger / pipeline rows past the issue strip |
+| `.poster.xhs` (1080×1440) | 88px       | 2         | 9                | 3 lines push the marginalia / ledger / pipeline rows past the issue strip |
 | `.poster.square` (1080×1080) | 78px   | 2         | 8                | Sub-paragraph or pull-quote clips                                          |
 | `.poster.wide` (2100×900)   | 96px    | 1         | 16               | Wraps and crowds the marginalia column                                     |
 
@@ -189,11 +189,11 @@ Two device wrappers (`.device-browser`, `.device-phone`) ship in both templates 
 
 ## Map Block (.map-block)
 
-For content with spatial relationships (routes, neighborhoods, store locations). Both seeds ship `.map-block` + `.map-pin` + `.map-legend`. Three modes — see `references/map-component.md` for the full playbook:
+For content with spatial relationships (routes, neighborhoods, store locations). Both seeds ship `.map-block` + `.map-pin` + `.map-legend`. Pick the map source by how literal the location needs to be — see `references/map-component.md` for the full playbook:
 
-- **Mode S** (default) — schematic SVG drawn in `viewBox="0 0 100 100"`, no token, hand-illustrated feel.
-- **Mode T** — Mapbox Static Images API URL as `<img>` source; needs `MAPBOX_ACCESS_TOKEN`. Apply `tone-paper` (Editorial) or `tone-paper` saturation-0 (Swiss).
-- **Mode O** — OSM tile composite, fallback when no token.
+- **Mode T** (default for travel / route / wayfinding) — Mapbox Static Images API URL as `<img>` source; needs `MAPBOX_ACCESS_TOKEN`. Apply `tone-paper` (Editorial) or `tone-paper` saturation-0 (Swiss).
+- **Mode O** — OSM static tile composite, fallback when no Mapbox token is available and the map still needs to be geographically real.
+- **Mode S** — schematic SVG drawn in `viewBox="0 0 100 100"` for conceptual or abstract relation maps only.
 
 Hard limits: ≤6 pins per board, ≤1 accent pin, no SVG text labels (names go in `.map-pin .card`).
 

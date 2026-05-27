@@ -122,7 +122,7 @@ When this pattern does NOT apply:
 - Posts with one good photo only — use M16 for P1, then M02 once on P3-4 with that same photo or a different angle. Do not pad.
 - Swiss-mode product/release posts — photos in Swiss are product renders or UI screenshots, not lifestyle. Use S08 Image Hero, not M16.
 
-For the cover title placement and typography on a great photo, see `references/layout-recipes.md` M16 (4 modes: 顶压底沉 / 侧栏立柱 / 角落徽章 / 下沉条带) and `references/image-overlay.md` (subject map + mask).
+For the cover title placement and typography on a great photo, see `references/layout-recipes.md` M16 (4 modes: 顶压底沉 / 侧栏立柱 / 角落徽章 / 下沉条带) and `references/image-overlay.md` (subject map + localized tint fallback).
 
 ## Page Count Guidance
 

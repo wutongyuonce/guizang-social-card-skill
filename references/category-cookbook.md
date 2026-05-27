@@ -11,7 +11,7 @@ Per-category cheat sheet for the 11 most common Rednote (小红书) content type
 
 This is a routing document. When the user names a category, find the row here and start from the listed recipes instead of building from a blank file.
 
-For any category, if a poster has a full-bleed image with text on top, also follow `image-overlay.md` (mask + subject avoidance).
+For any category, if a poster has a full-bleed image with text on top, also follow `image-overlay.md` (photo qualification, localized tint fallback, and subject avoidance).
 
 ---
 
@@ -21,7 +21,7 @@ For any category, if a poster has a full-bleed image with text on top, also foll
 
 - **Recipes**: M01 (text-led cover, no photo dominance) **or M16 (image-led cover, when the user has 1+ great photos)**, M02 (field-note photo), M11 (marginalia essay), M07 (closing note), S11 (itinerary ledger). For image-heavy submissions use the M16 → S11/M05 → M02 sequence in `references/content-planning.md`.
 - **Style mode**: Editorial × kraft-paper / dune (warm-tone destinations) or × forest-ink (mountain/wilderness). Swiss × IKB works for "trip data report" style.
-- **Text scheme**: Text beside image is the default. Cover uses text-on-image with a vertical falloff mask. Body pages use photo + caption pairs (field-note style).
+- **Text scheme**: Text beside image is the default. Cover can use text-on-image only when the photo has a quiet zone; add localized tint only if the thumbnail check fails. Body pages use photo + caption pairs (field-note style).
 - **Image source**: User photos > Pexels (for China destinations — supports Chinese keyword search) > Unsplash (`/s/photos/<destination>`, best for overseas / English keywords) > Flickr CC (`license=2,3,4,5,6,9`, when you need documentary "real trip" feel rather than postcard polish). Always log to `assets/SOURCES.md`.
 - **Content shape**: 5-7 pages. Cover (destination + dates) → atmosphere photo + lead → itinerary ledger → 2-3 field notes (one location each) → closing quote / next-stop teaser.
 - **Pitfalls**: Generic "best places in X city" listicle voice. Cure: keep one specific date / weather / mileage detail per page to anchor it as observed, not researched.
@@ -52,7 +52,7 @@ See: `local-tests/demo-image-01-yading/` for a reference build.
 
 - **Recipes**: M01 (cover with full-bleed art), M08 (boss tier ledger), S07 (takeaway ledger), S11 (chapter timeline), M15 (build before/after).
 - **Style mode**: Editorial dark (ink-classic with paper inverted to near-black) for atmospheric games (黑神话 / Elden Ring). Swiss for esports / competitive data ("胜率 / KDA / 出装").
-- **Text scheme**: Text-on-image is standard for game covers because game art is the primary draw. Mask is mandatory (see `image-overlay.md` Rule 1A vertical falloff).
+- **Text scheme**: Text-on-image is standard for game covers because game art is the primary draw. Use subject mapping and thumbnail checks from `image-overlay.md`; add a localized, image-toned tint only where the title needs support.
 - **Image source**: Wallhaven JSON API (see SKILL.md Step 6) for keyword pulls, official screenshots for specific moments. Always disclose copyright risk and log to `SOURCES.md`. If user opts out of attribution, do not crop the credit out of the image itself.
 - **Content shape**: 4-6 pages. Cover (game name + playtime) → first impression page → chapter-by-chapter ledger → memorable boss / scene page → verdict.
 - **Pitfalls**: 

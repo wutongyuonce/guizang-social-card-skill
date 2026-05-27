@@ -11,6 +11,12 @@ When the user supplies an app / web / code / dashboard screenshot, **do not** dr
 
 For **photographic** content (people, scenery, products) — keep using `.frame-img`. The treatments below assume a pixel-perfect UI source where contain-fit is non-negotiable.
 
+## Subject Prep
+
+Before framing, decide what the actual screenshot subject is. If the source capture contains a floating modal/card over an unrelated page, desktop chrome, cropped side text, cursor trails, notification fragments, or leftover background UI, crop to the foreground window/card first and then place that cleaned subject into the stage. Do not beautify the entire raw capture when it carries accidental text or partial UI behind the subject.
+
+Screenshot beautification must not introduce perspective, skew, rotation, or 3D tilt unless the user explicitly asks for a mockup scene. A CleanShot-style treatment is orthographic: straight subject, equal scaling, quiet background, and clear safe padding.
+
 ## Anatomy
 
 ```
@@ -70,6 +76,38 @@ Never go above 14 px — anything bigger reads as iOS marketing.
 | `bg-ink`     | Dark-mode UI shot   | Dark-mode UI shot      |
 
 Backgrounds are **never** accent-coloured. If the screenshot needs an accent emphasis, add a `.t-cat` chip or `.kicker` next to it — don't tint the stage.
+
+#### Solid `bg-*` vs asset `bg-asset-*`
+
+The tokens above are **CSS-generated solids** — flat tones, fast, no asset dependency. They work, but for code / IDE / dashboard / dense-UI captures they can feel undersold. Ported from the PPT skill, both seed templates also ship 9 **real texture WebP** backgrounds under `assets/screenshot-backgrounds/`. Reach for these when the screenshot is the page's hero, when a solid stage feels too thin, or when you need the warmth/grain of a printed magazine.
+
+Editorial assets (`assets/screenshot-backgrounds/style-a/`):
+
+| Class                       | Tone               | Best for                                          |
+| --------------------------- | ------------------ | ------------------------------------------------- |
+| `bg-asset-dune`             | Warm sand          | Travel / outdoor app shots, lifestyle products    |
+| `bg-asset-forest-ink`       | Deep forest green  | Dark-mode UI on Editorial — pairs with `ink-classic` |
+| `bg-asset-indigo-porcelain` | Cool porcelain     | Reading / writing apps, design tools              |
+| `bg-asset-kraft-paper`      | Kraft brown        | Notes / journaling / handwritten apps             |
+| `bg-asset-monocle-classic`  | Cream paper        | Default warm hero — most magazine-like            |
+
+Swiss assets (`assets/screenshot-backgrounds/style-b/`):
+
+| Class                      | Accent            | Use only when current accent matches             |
+| -------------------------- | ----------------- | ------------------------------------------------ |
+| `bg-asset-ikb-dot`         | IKB Klein Blue    | `data-accent="ikb"` decks only                   |
+| `bg-asset-lemon-green-dot` | Lemon-green       | `data-accent="lemon-green"` decks only           |
+| `bg-asset-lemon-grid`      | Lemon-yellow      | `data-accent="lemon"` decks only                 |
+| `bg-asset-safety-orange`   | Safety orange     | `data-accent="safety-orange"` decks only         |
+
+**Rules of thumb**
+
+- Don't mix accents — a `data-accent="ikb"` deck must not pull a `bg-asset-safety-orange` stage.
+- Asset backgrounds already carry texture; don't stack `shadow-ed` on top (the `1px` outline will read as a SaaS frame). Use `shadow-soft` or `shadow-none`.
+- Decide once per deck whether asset stages are part of the visual identity — don't sprinkle one asset background into a deck of solid stages, it looks like a sample card.
+- These assets are crop-safe at 16:10 and 16:9. For tall `r-3x4` or square `r-1x1` slots, prefer solid `bg-*` — the texture pattern can read awkwardly when over-cropped.
+
+**Path note**: the `.bg-asset-*` rules use `url("../assets/screenshot-backgrounds/...")` — this assumes your deck's `index.html` lives one directory below `assets/`. If you place the deck elsewhere, override these rules locally with the correct relative path.
 
 ### 5. `inset-*` (padding between shot and stage)
 
@@ -137,6 +175,16 @@ Two recipes that cover 80% of cases.
 **Editorial deep-dive** — desk-photo warmth:
 ```
 .frame-shot.r-16x10.corners-sm.shadow-soft.bg-paper-2.inset-sub
+```
+
+**Editorial hero with real texture** — magazine-grade stage:
+```
+.frame-shot.r-16x10.corners-sm.shadow-soft.bg-asset-monocle-classic.inset-bal
+```
+
+**Swiss hero with brand-aligned stage** — only when accent matches asset:
+```
+.frame-shot.r-16x10.corners-sq.shadow-none.bg-asset-ikb-dot.inset-bal
 ```
 
 For comparison shots (before / after), use **the same parameters** on both — different treatment between cells reads as inconsistency, not contrast.

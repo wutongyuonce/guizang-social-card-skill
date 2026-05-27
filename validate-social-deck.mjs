@@ -14,6 +14,7 @@
  *   R4  min readable font     body/lead/caption/label/meta below the mobile-safe floor
  *   R5  4-band density        on 3:4 boards: <75% filled OR any under-filled band > 216px
  *   R6  h-xl hard cap         display title lines/chars exceed the per-board cap
+ *   R7  figure margin drift    browser-default <figure> margin offsets media alignment
  */
 import { chromium } from "playwright";
 import { fileURLToPath } from "node:url";
@@ -210,6 +211,29 @@ for (const s of sections) {
     warns.push({ rule: "R4", msg: `${t.role} "${t.text}" at ${t.size}px < ${t.min}px floor`, fix: "cut copy instead of shrinking type (components.md Minimum Readable Sizes)" });
   }
 
+  // R7 figure margin drift — catches browser-default 40px figure margins on custom media blocks.
+  const figureDrift = await s.evaluate(el => {
+    const out = [];
+    for (const fig of el.querySelectorAll("figure")) {
+      const cs = getComputedStyle(fig);
+      const ml = parseFloat(cs.marginLeft) || 0;
+      const mr = parseFloat(cs.marginRight) || 0;
+      if (ml >= 16 || mr >= 16) {
+        const text = fig.textContent.trim().replace(/\s+/g, " ").slice(0, 32);
+        out.push({
+          cls: fig.className ? "." + fig.className.split(" ").filter(Boolean).join(".") : "figure",
+          ml: Math.round(ml),
+          mr: Math.round(mr),
+          text,
+        });
+      }
+    }
+    return out;
+  });
+  for (const f of figureDrift) {
+    warns.push({ rule: "R7", msg: `${f.cls} has horizontal figure margin ${f.ml}px / ${f.mr}px${f.text ? ` near "${f.text}"` : ""}`, fix: "reset figure margins in the seed or task CSS: .poster figure { margin: 0; }" });
+  }
+
   // R5 4-band density (3:4 only)
   if (meta.board === "xhs") {
     const bands = await s.evaluate(el => {
@@ -329,7 +353,7 @@ for (const { meta, fails, warns } of report) {
 }
 
 lines.push("");
-lines.push(`Legend: R1 overflow · R2 footer collision · R3 swiss bold display · R4 min font · R5 4-band density · R6 h-xl cap`);
+lines.push(`Legend: R1 overflow · R2 footer collision · R3 swiss bold display · R4 min font · R5 4-band density · R6 h-xl cap · R7 figure margin drift`);
 lines.push(`Exit code 1 only on FAIL. Warnings are advisory.`);
 
 console.log(lines.join("\n"));

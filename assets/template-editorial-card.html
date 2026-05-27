@@ -141,6 +141,7 @@
     .poster.xhs    { width: 1080px; height: 1440px; }
     .poster.square { width: 1080px; height: 1080px; }
     .poster.wide   { width: 2100px; height:  900px; }
+    .poster figure { margin: 0; }
 
     /* Default content padding by board */
     .poster.xhs    .content { padding: 96px 88px; }
@@ -418,6 +419,14 @@
       background-image: radial-gradient(var(--line) 1px, transparent 1px);
       background-size: 18px 18px;
     }
+
+    /* asset backgrounds — ported from PPT skill, real texture for screenshot wells */
+    /* path is relative to the deck's index.html — keep seed and final deck in same dir, or override */
+    .frame-shot.bg-asset-dune             { background: #d8c9a8 url("../assets/screenshot-backgrounds/style-a/dune.webp")             center/cover no-repeat; }
+    .frame-shot.bg-asset-forest-ink       { background: #1f2a24 url("../assets/screenshot-backgrounds/style-a/forest-ink.webp")       center/cover no-repeat; }
+    .frame-shot.bg-asset-indigo-porcelain { background: #cfd6dd url("../assets/screenshot-backgrounds/style-a/indigo-porcelain.webp") center/cover no-repeat; }
+    .frame-shot.bg-asset-kraft-paper      { background: #c9a983 url("../assets/screenshot-backgrounds/style-a/kraft-paper.webp")      center/cover no-repeat; }
+    .frame-shot.bg-asset-monocle-classic  { background: #e8e1d4 url("../assets/screenshot-backgrounds/style-a/monocle-classic.webp")  center/cover no-repeat; }
 
     /* padding wraps the inner shot — content gets to "float" on the bg tone */
     .frame-shot.inset-none > img,

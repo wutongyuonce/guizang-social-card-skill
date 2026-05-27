@@ -131,9 +131,11 @@ Programmatic framing is preferred for user-provided screenshots:
 
 - Create a clean target-ratio frame.
 - Add plain white, refined grey, or paper background. Do not add page-wide grid/dot backgrounds unless the user explicitly asks for a technical blueprint look.
+- If the capture contains a floating window/card over unrelated UI, crop to the foreground subject before placing it.
 - Place screenshot inside with safe padding.
 - Preserve readable text.
 - Do not redraw the screenshot unless the user asked for redesign.
+- Do not add perspective, skew, rotation, or mockup tilt unless the user explicitly asks for a scene mockup.
 
 For Swiss:
 

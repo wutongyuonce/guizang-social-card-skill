@@ -180,9 +180,9 @@ Both pass HTML linting; both fail the thumbnail readability test.
 
 Fix by following `image-overlay.md`:
 
-1. **Add a mask layer** appropriate to where text lands — vertical falloff (top+bottom), side scrim (one column), or radial vignette (text fills the canvas).
+1. **Qualify the photo first.** It needs a low-detail quiet zone and restrained light. If it fails, switch to a framed-photo recipe instead of forcing text on top.
 2. **Map the subject before placing the title.** Read the image, describe in plain language where the face/focal feature sits, record the subject map as an HTML comment next to the hero block. Place text only in documented safe zones.
 3. **Match `object-position` to subject location** — see the table in `image-overlay.md`. Never leave it at default for face / hero shots.
-4. **Thumbnail test** — render the PNG, downscale to 360 px wide, and look at the title. If it fights the photo, the mask is too thin; if the photo looks dead, the mask is too heavy.
+4. **Thumbnail test** — render the PNG, downscale to 360 px wide, and look at the title. If it fights the photo, add a localized, image-toned tint only around the title area; if the photo looks dead, the tint is too heavy or the photo is wrong.
 
 This anti-pattern survives almost every other check because the HTML is valid, the image loads, and the title renders. The only way to catch it is to look at the rendered output at the size readers will actually see it.

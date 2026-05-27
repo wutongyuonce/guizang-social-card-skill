@@ -118,6 +118,7 @@
     .poster.xhs    { width: 1080px; height: 1440px; }
     .poster.square { width: 1080px; height: 1080px; }
     .poster.wide   { width: 2100px; height:  900px; }
+    .poster figure { margin: 0; }
 
     .poster.xhs    .content { padding: var(--sp-12) var(--sp-11); }
     .poster.square .content { padding: var(--sp-11) var(--sp-11); }
@@ -409,6 +410,13 @@
       background-image: radial-gradient(var(--grey-2) 1px, transparent 1px);
       background-size: 18px 18px;
     }
+
+    /* asset backgrounds — ported from PPT skill, real texture for screenshot wells.
+       Use ONLY when current accent matches the asset's accent (don't mix oranges and IKB). */
+    .frame-shot.bg-asset-ikb-dot          { background: #0c1a3a url("../assets/screenshot-backgrounds/style-b/ikb-dot-gradient.webp")       center/cover no-repeat; }
+    .frame-shot.bg-asset-lemon-green-dot  { background: #d6e08a url("../assets/screenshot-backgrounds/style-b/lemon-green-dot-shadow.webp") center/cover no-repeat; }
+    .frame-shot.bg-asset-lemon-grid       { background: #e6e9b8 url("../assets/screenshot-backgrounds/style-b/lemon-grid.webp")             center/cover no-repeat; }
+    .frame-shot.bg-asset-safety-orange    { background: #ff5b1f url("../assets/screenshot-backgrounds/style-b/safety-orange-halftone.webp") center/cover no-repeat; }
 
     .frame-shot.inset-none > img,
     .frame-shot.inset-none > .shot-body { padding: 0; }

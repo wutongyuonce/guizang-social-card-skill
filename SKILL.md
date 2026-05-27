@@ -70,9 +70,9 @@ Read these files as needed:
 - `references/portrait-fill.md` when adapting layouts to 3:4 and avoiding under-filled vertical space.
 - `references/content-planning.md` for cover hooks, page breakdown, and copy compression.
 - `references/production-workflow.md` for HTML/CSS rendering and image handling.
-- `references/image-overlay.md` whenever text sits on top of a photo: contrast mask rules + face / subject avoidance via multimodal subject mapping.
+- `references/image-overlay.md` whenever text sits on top of a photo: photo qualification, localized tint fallback, and face / subject avoidance via multimodal subject mapping.
 - `references/screenshot-treatment.md` when the user supplies an app / web / code / dashboard screenshot — picks `.frame-shot` over `.frame-img`, sets corners/shadow/bg/inset, decides on `.device-browser` or `.device-phone` chrome.
-- `references/map-component.md` when the content has spatial relationships (travel route, store locations, walking tour) — picks `.map-block` mode S (schematic SVG, default) / T (Mapbox Static, requires token) / O (OSM, fallback), places pins, never uses live JS.
+- `references/map-component.md` when the content has spatial relationships (travel route, store locations, walking tour) — real routes default to Mapbox Static or OSM static tiles; schematic SVG is only for conceptual / illustrative maps. Pins are HTML overlays; never use live JS maps.
 - `references/title-shortener.md` when the task is a WeChat 21:9+1:1 cover pair, or any cross-platform reuse — derives the 1:1 short title from the long one (5-step extraction, 4 patterns, anti-patterns, sizing on `.poster.square`).
 - `references/category-cookbook.md` to route a user-named Rednote category (旅行 / 职场 / 游戏 / 影视 / 彩妆 / 美食 / 穿搭 / 家居 / 健身 / 情感 / 推荐) to applicable recipes and to confirm scope.
 - `references/qa-checklist.md` before delivering final images.
@@ -178,7 +178,7 @@ The seed already wires up: font loading, theme tokens, all three poster sizes (`
 
 Set the theme/accent on the `<html>` element:
 
-- Editorial: `<html data-theme="ink-classic | indigo-porcelain | forest-ink | kraft-paper | dune">`.
+- Editorial: `<html data-theme="ink-classic | indigo-porcelain | forest-ink | kraft-paper | dune | midnight-ink">`.
 - Swiss: `<html data-accent="ikb | lemon-yellow | lemon-green | safety-orange">`.
 
 Replace the single placeholder poster after `<!-- POSTERS_HERE -->` with one `<section class="poster ...">` block per page, each carrying the HTML skeleton from a chosen Layout Recipe (M01-M16 for Editorial, S01-S12 for Swiss). Never load the wrong template's class system: Editorial recipes assume serif display + ledger/marginalia/pipeline-v; Swiss recipes assume Inter + card-fills + matrix/h-bar/kpi-tower. Mixing them silently breaks the layout.
@@ -189,11 +189,11 @@ Default implementation pattern:
 
 - Create a task folder in the current workspace, for example `social-card-<slug>/`.
 - Put source images in `assets/`.
-- Start from the seed template copied in Step 4.5, not a blank file. Only the `<!-- POSTERS_HERE -->` region should change page-to-page.
+- Start from the seed template copied in Step 4.5, not a blank file. Prefer changing only the `<!-- POSTERS_HERE -->` region page-to-page. If a task needs custom layout CSS, add one clearly named task-scoped block in the copied file and keep semantic defaults reset (`figure { margin:0; }`, no browser-default spacing surprises).
 - Use Playwright or a browser screenshot tool to export each `.poster` or `.cover` node.
 - Save rendered images in `output/`.
 - Verify dimensions and inspect the rendered PNGs.
-- Run `node validate-social-deck.mjs <task-dir>` after every render. It checks overflow (R1), footer collision (R2), Swiss bold display (R3), minimum font size (R4), 4-band density (R5), and `.h-xl` line caps (R6). Exit code 1 on any FAIL — fix before delivery. WARN is advisory but read it.
+- Keep `node validate-social-deck.mjs <task-dir>` available for auto-check passes. It checks overflow (R1), footer collision (R2), Swiss bold display (R3), minimum font size (R4), 4-band density (R5), `.h-xl` line caps (R6), and browser-default figure margin drift (R7). Exit code 1 on any FAIL — fix before final delivery when auto-check is requested. WARN is advisory but read it.
 
 Do not place visible instructions, keyboard shortcuts, or usage explanations inside the images.
 
@@ -212,10 +212,10 @@ When the user provides screenshots:
 
 Whenever a poster places text on top of a photo (full-bleed cover, large image well, generated-image overlay), follow `references/image-overlay.md`:
 
-- **Mask is mandatory.** A photo covering ≥60% of the canvas needs a contrast mask layer (vertical falloff / side scrim / radial vignette). Never rely on the photo's own brightness.
+- **Selection first, tint only if needed.** A photo covering ≥60% of the canvas must first pass the quiet-zone and light tests in `image-overlay.md`. Compose without a mask first; if the thumbnail check fails, add only a localized, image-toned tint around the title area. Do not default to full-canvas falloffs.
 - **Subject mapping is mandatory.** Before placing the title, read the image with the Read tool, describe in plain language where the subject's face/focal feature sits, and record the subject map as an HTML comment next to the hero block. Place text only in the documented safe zones.
 - **Crop discipline — set `object-position` inline on every photo.** The template default (`center 50%`) is a fallback, not a recommendation. For every `<img>`, decide based on subject location and write it inline: e.g. `style="object-position:center 62%"` for mid-body subjects, `center 30%` for sky-heavy landscapes with horizon-line subjects, `center 70%` for foreground gear. See the table in `references/components.md` for ranges and `image-overlay.md` for face-photo specifics. Skipping this silently crops subjects out of frame on tall ratios (`r-3x4`, `r-21x9`).
-- **Thumbnail test.** Downscale the rendered PNG to 360 px wide and confirm the title is still legible. If the title fights the photo, the mask is too thin; if the photo looks dead, the mask is too heavy.
+- **Thumbnail test.** Downscale the rendered PNG to 360 px wide and confirm the title is still legible. If the title fights the photo, move the title, swap the photo, or add a localized image-toned tint; if the photo looks dead, the tint is too heavy or the photo was wrong for text-on-image.
 
 Editorial dark covers (e.g. game journals on key art) and Swiss covers with hero photos both require these checks. Skipping them is a known failure mode (see `style-system.md` Anti-Pattern D).
 

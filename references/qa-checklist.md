@@ -69,7 +69,7 @@ If failing: don't shrink the canvas, don't add decorative blobs. Either expand c
 
 Run these only for posters where text touches a photo (full-bleed cover, large image well, generated overlay). See `references/image-overlay.md`.
 
-- Image area ≥60% of canvas → A, B, or C contrast mask is present (not a flat black rectangle behind text).
+- Image area ≥60% of canvas → the photo passes the quiet-zone + light tests; no-mask composition was tried first; any tint is localized, image-toned, and only used if the thumbnail check fails.
 - Subject map is documented as an HTML comment next to the hero block (face / focal feature location + safe zones).
 - No display title (≥72 px) overlaps a face, hand, or key product feature.
 - `object-position` was chosen from the subject-location table, not left at default for face shots.

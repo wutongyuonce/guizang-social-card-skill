@@ -8,7 +8,50 @@ Both seeds ship `.map-block` + `.map-pin` + `.map-legend` classes. The same mark
 
 Pick mode **before** writing the markup. They are not stackable.
 
-### Mode S · Schematic SVG (default, no token)
+Default selection:
+
+- Travel guides, walking routes, hiking, store locations, or anything the reader may use for orientation → **Mode T** Mapbox Static.
+- Same need, but no Mapbox token → **Mode O** OSM static tile composite.
+- Conceptual relationship map, fictional route, or purely editorial "places are connected like this" graphic → **Mode S** schematic SVG.
+
+### Mode T · Mapbox Static Image (default for real routes)
+
+Real raster tiles, desaturated and tinted to match the deck. Use when the content is travel / hiking / neighborhood wayfinding and you need to show actual terrain or streets. Requires `MAPBOX_ACCESS_TOKEN` in the build env.
+
+```
+https://api.mapbox.com/styles/v1/mapbox/light-v11/static/
+  pin-s-1+555555(116.404,39.915),
+  pin-l-2+1936b3(116.421,39.918)
+  /116.412,39.916,14,0/1200x675@2x
+  ?access_token=YOUR_TOKEN
+```
+
+```html
+<div class="map-block r-16x10 tone-paper">
+  <img src="https://api.mapbox.com/styles/v1/mapbox/light-v11/static/.../1200x675@2x?access_token=..." alt="Lhasa walking route">
+
+  <!-- pins overlay (calculate % from mapbox bounds) -->
+  <div class="map-pin" style="left:34%; top:52%;">...</div>
+  <div class="map-pin accent" style="left:64%; top:42%;">...</div>
+
+  <div class="map-legend">LHASA · MAPBOX LIGHT</div>
+</div>
+```
+
+Editorial uses `tone-paper` (multiply-blend, saturation 36%). Swiss uses `tone-paper` with saturation 0 (pure greyscale). Don't show the raw Mapbox colour-saturated style — it fights the deck.
+
+**Style allowlist** for the URL — keep it monochrome:
+- `mapbox/light-v11`
+- `mapbox/dark-v11`
+- `mapbox/streets-v12` (only with `tone-paper`, never raw)
+
+Never use `outdoors-v12` or `satellite-v9` — too colourful, will clash with both styles.
+
+### Mode O · OpenStreetMap tile composite (fallback for real routes)
+
+Free, no token. Use this when a real map is needed but Mapbox is unavailable. Render server-side via `staticmaps` npm package or similar, then place the raster as the `.map-block > img` child. Quality is lower than Mapbox, so keep labels sparse and let HTML pins carry the useful text.
+
+### Mode S · Schematic SVG (conceptual / illustrative only)
 
 Hand-drawn-style vector map drawn into a `viewBox="0 0 100 100"` SVG. Best for editorial decks where the map should feel like an illustrated guide, not a satellite capture. No external service.
 
@@ -49,46 +92,9 @@ Layer order in the SVG (back to front):
 
 Pins sit *outside* the SVG, as HTML siblings — they get the `.frame-shot` treatment for free.
 
-### Mode T · Mapbox Static Image (signed token)
-
-Real raster tiles, desaturated and tinted to match the deck. Use when the content is travel / hiking and you need to show actual terrain. Requires `MAPBOX_ACCESS_TOKEN` in the build env.
-
-```
-https://api.mapbox.com/styles/v1/mapbox/light-v11/static/
-  pin-s-1+555555(116.404,39.915),
-  pin-l-2+1936b3(116.421,39.918)
-  /116.412,39.916,14,0/1200x675@2x
-  ?access_token=YOUR_TOKEN
-```
-
-```html
-<div class="map-block r-16x10 tone-paper">
-  <img src="https://api.mapbox.com/styles/v1/mapbox/light-v11/static/.../1200x675@2x?access_token=..." alt="Lhasa walking route">
-
-  <!-- pins overlay (calculate % from mapbox bounds) -->
-  <div class="map-pin" style="left:34%; top:52%;">...</div>
-  <div class="map-pin accent" style="left:64%; top:42%;">...</div>
-
-  <div class="map-legend">LHASA · MAPBOX LIGHT</div>
-</div>
-```
-
-Editorial uses `tone-paper` (multiply-blend, saturation 36%). Swiss uses `tone-paper` with saturation 0 (pure greyscale). Don't show the raw Mapbox colour-saturated style — it fights the deck.
-
-**Style allowlist** for the URL — keep it monochrome:
-- `mapbox/light-v11`
-- `mapbox/dark-v11`
-- `mapbox/streets-v12` (only with `tone-paper`, never raw)
-
-Never use `outdoors-v12` or `satellite-v9` — too colourful, will clash with both styles.
-
-### Mode O · OpenStreetMap tile composite (fallback)
-
-Free, no token. Reach for this only if you don't have a Mapbox token and the schematic doesn't carry the message. Render server-side via `staticmaps` npm package or similar — not covered here. Quality is lower than Mapbox.
-
 ## Hard rules
 
-- **No pin labels on the SVG**. Names live in `.map-pin .card`, never as SVG `<text>`. Keeps font rendering consistent and avoids vector-text scaling issues.
+- **No pin labels on the SVG or raster tile.** Names live in `.map-pin .card`, never as SVG `<text>` or baked into the map image. Keeps font rendering consistent and avoids scaling issues.
 - **Max 6 pins per board**. More than that, the cards collide. Use a relations / index card to list secondary points.
 - **One accent pin maximum**. Multiple accents kill the visual hierarchy.
 - **Pins must not overlap cards**. Test in browser first — if two cards are within 80 px on the long axis, alternate `.left` placement.
@@ -136,7 +142,7 @@ Tone only affects `> img` children, not the SVG schematic.
 
 ## Common mistakes
 
-- **Pasting Google Maps screenshots** — wrong tone, has UI chrome, will look out of place. Use Mapbox Static or schematic.
+- **Pasting Google Maps screenshots** — wrong tone, has UI chrome, will look out of place. Use Mapbox Static, OSM static tiles, or a schematic when the map is conceptual.
 - **Tracing a real map into SVG** — schematic should *abstract*, not replicate. If a viewer can guess the city from your SVG alone, you over-traced.
 - **Tiny pin cards** — `.card .name` is 15-16 px minimum. Cut the name if it overflows; never shrink.
 - **Accent on every pin** — defeats the highlight system. Pick one most-important point.
