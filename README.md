@@ -174,14 +174,17 @@ Skill 本身是结构化工作流,Agent 会按 7 步走:
 node validate-social-deck.mjs path/to/task-dir
 ```
 
-6 条规则,基于 Playwright 真实渲染测量,不是静态扫描:
+9 条规则,基于 Playwright 真实渲染测量,不是静态扫描:
 
-- **R1** Overflow — 任何 section 超出 `.poster` 立刻报错
-- **R2** Type Caps — `.h-xl` / `.h-display` 字号 + 字重组合超出种子定义
-- **R3** Footer Collision — 内容压到底部 footer / page-number
-- **R4** 4-Band Density — 1440 高画布切 4 横带,每带应有内容或主动留白理由
-- **R5** Frame Overflow — `.frame-img` / `.frame-shot` 子元素溢出框
-- **R6** Swiss Identity — Swiss 模板里 inline `font-weight >= 700` 警告(违反"越大越细")
+- **R1** Overflow — 任何 section 超出 `.poster` 立刻报错,并给出超出像素对应的修正阶梯
+- **R2** Footer Collision — 内容压到底部 footer / page-number
+- **R3** Swiss Bold Display — Swiss 大标题违反"越大越细"时报警
+- **R4** Min Readable Font — 正文、说明、标签字号低于手机可读下限
+- **R5** 4-Band Density — 1440 高画布切 4 横带,每带应有内容或主动留白理由
+- **R6** H-XL Line Cap — `.h-xl` / `.h-display` / `.h-statement` 行数超出画板预算
+- **R7** Figure Margin Drift — 浏览器默认 `<figure>` margin 造成版式漂移
+- **R8** Visual Bounds — 测量真实可见内容的上/下边界,报告视觉超出和底部空白
+- **R9** Title Gap — 标题与下一块内容之间的距离过小,避免贴在一起
 
 `SKILL.md` 第 7 步明确**默认不自动跑** validator —— 等用户先看完图再问,避免每轮多花数十秒。
 
